@@ -91,7 +91,7 @@ object DynamograpDistributedWriting extends Nisperon{
     singleElements.initWrite()
     val parser = new PullGoParser(Source.fromFile("/home/ec2-user/go.owl"))
     for (output <- parser){
-      putItemRequest.put("0", "", List(List(output)))
+      singleElements.put("0", "", List(List(output)))
     }
   }
 
