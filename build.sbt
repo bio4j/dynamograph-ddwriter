@@ -18,22 +18,20 @@ scalaVersion:= "2.10.4"
 conflictManager := ConflictManager.latestRevision
 
 libraryDependencies ++= Seq(
-  "ohnosequences" % "compota_2.10" % "0.9.1-SNAPSHOT" exclude("com.chuusai", "shapeless_2.10.2"),
+  "ohnosequences" % "compota_2.10" % "0.9.1-SNAPSHOT" exclude("ohnosequences", "type-sets_2.10"),
   "commons-io"     % "commons-io" % "2.1",
   "com.novocode"   % "junit-interface" % "0.10" % "test",
   "org.clapper"   % "avsl_2.10" % "1.0.1",
   "org.json4s"    % "json4s-native_2.10" % "3.2.5",
-  "ohnosequences" % "aws-scala-tools_2.10" % "0.7.1-SNAPSHOT" exclude("com.chuusai", "shapeless_2.10.2"),
-  "ohnosequences" % "statika_2.10" % "1.0.0" exclude("com.chuusai", "shapeless_2.10.2"),
-  "ohnosequences" % "aws-statika_2.10" % "1.0.0" exclude("com.chuusai", "shapeless_2.10.2"),
-  "ohnosequences" % "amazon-linux-ami_2.10" % "0.14.1" exclude("com.chuusai", "shapeless_2.10.2"),
+  "ohnosequences" % "aws-scala-tools_2.10" % "0.7.1-SNAPSHOT"  exclude("ohnosequences", "type-sets_2.10"),
+  "ohnosequences" % "statika_2.10" % "1.0.0"  exclude("ohnosequences", "type-sets_2.10"),
+  "ohnosequences" % "aws-statika_2.10" % "1.0.0" exclude("ohnosequences", "type-sets_2.10"),
+  "ohnosequences" % "amazon-linux-ami_2.10" % "0.14.1"  exclude("ohnosequences", "type-sets_2.10"),
   "net.databinder" %% "unfiltered-filter" % "0.7.1",
   "net.databinder" %% "unfiltered-netty" % "0.7.1",
   "net.databinder" %% "unfiltered-netty-server" % "0.7.1",
-  "bio4j" % "dynamograph_2.10" % "0.1.2-SNAPSHOT" exclude("com.chuusai", "shapeless_2.11") exclude("ohnosequences", "type-sets_2.11") exclude("org.scalatest", "scalatest_2.11") exclude("ohnosequences", "aws-statika_2.11") exclude("ohnosequences", "statika_2.11")
+  "bio4j" % "dynamograph_2.10" % "0.1.2-SNAPSHOT" exclude("com.chuusai", "shapeless_2.11")  exclude("ohnosequences", "aws-statika_2.11") exclude("ohnosequences", "statika_2.11")
 )
-
-//"dependencyGroupId" % "dependencyArtifactId" % "dependencyVersion"    exclude("com.chuusai", "shapeless_2.10")
 
 resolvers +=  Resolver.url("era7" + " public ivy releases",  url("http://releases.era7.com.s3.amazonaws.com"))(Resolver.ivyStylePatterns)
 
