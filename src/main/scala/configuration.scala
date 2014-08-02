@@ -3,18 +3,40 @@ package ddwriter
 import ohnosequences.nisperon.bundles.NisperonMetadataBuilder
 import ohnosequences.nisperon.console.Server
 import ohnosequences.nisperon._
-import ohnosequences.nisperon.ListMonoid
-import ohnosequences.nisperon.JsonSerializer
-import ohnosequences.nisperon.NisperoConfiguration
+import ohnosequences.nisperon.JSON
 import ohnosequences.nisperon.queues.{unitQueue, ProductQueue}
 import com.bio4j.dynamograph.parser.{PullGoParser, SingleElement}
 import com.bio4j.dynamograph.ServiceProvider
-import com.amazonaws.services.dynamodbv2.model.PutItemRequest
+import com.amazonaws.services.dynamodbv2.model.{AttributeValue, PutItemRequest}
 import ohnosequences.nisperon.logging.S3Logger
 import scala.io.Source
 import ohnosequences.awstools.ec2.{InstanceType, InstanceSpecs}
-import java.io.File
+import java.io._
+import scala.collection.JavaConverters._
+import scala.collection.JavaConversions._
 import ohnosequences.awstools.autoscaling.OnDemand
+import com.bio4j.dynamograph.parser.SingleElement
+import scala.Some
+import ohnosequences.nisperon.SingleGroup
+
+object PutItemRequestSerializer extends Serializer[List[PutItemRequest]] {
+
+  case class PutItemR(val name: String, attributes : Map[String,AttributeValue], val returnedValues : String, val returnedConsumedCapacity :String, val conditionalOperator : String)
+
+  def fromString(s: String): List[PutItemRequest] = {
+    val putItems = JSON.extract[List[PutItemR]](s)
+    val result = putItems.map(x => {
+      new PutItemRequest().withTableName(x.name).withItem(x.attributes).withReturnValues(x.returnedValues).withReturnConsumedCapacity(x.returnedConsumedCapacity).withConditionalOperator(x.conditionalOperator)
+    })
+    result
+  }
+
+  def toString(request: List[PutItemRequest]): String = {
+    val  converted = request.map(x => PutItemR(x.getTableName,x.getItem.toMap,x.getReturnValues, x.getReturnConsumedCapacity, x.getConditionalOperator))
+    JSON.toJSON(converted)
+  }
+}
+
 
 object mapSingleElementInstructions extends Instructions[List[SingleElement], List[PutItemRequest]] {
 
@@ -25,7 +47,6 @@ object mapSingleElementInstructions extends Instructions[List[SingleElement], Li
   override def solve(input: List[SingleElement], logger: S3Logger, context: Context): List[List[PutItemRequest]] = {
     logger.info("current folder: " + new File(".").getAbsolutePath)
     logger.info("input: " + input)
-    logger.uploadFile(new File("/etc/fstab"))
     List(ServiceProvider.mapper.map(input.head))
   }
 }
@@ -70,7 +91,7 @@ object DynamograpDistributedWriting extends Nisperon{
   val putItemRequest = s3queue(
     name = "putItemRequests",
     monoid = new ListMonoid[PutItemRequest],
-    serializer = new JsonSerializer[List[PutItemRequest]]
+    serializer = PutItemRequestSerializer
   )
 
   val mapNispero = nispero(
@@ -88,10 +109,21 @@ object DynamograpDistributedWriting extends Nisperon{
   )
 
   override def addTasks(): Unit = {
+    mapNispero.installWorker()
+    mapNispero.worker.runInstructions()
+    uploadNispero.installWorker()
+    uploadNispero.worker.runInstructions()
+    singleElements.init()
     singleElements.initWrite()
+    putItemRequest.init()
+    putItemRequest.initRead()
+    putItemRequest.initWrite()
+    unitQueue.initRead()
     val parser = new PullGoParser(Source.fromFile("/home/ec2-user/go.owl"))
     for (output <- parser){
       singleElements.put("0", "", List(List(output)))
+      singleElements.s3Writer.flush()
+      singleElements.sqsWriter.get.flush()
     }
   }
 
