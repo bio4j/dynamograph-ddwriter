@@ -109,16 +109,8 @@ object DynamograpDistributedWriting extends Nisperon{
   )
 
   override def addTasks(): Unit = {
-    mapNispero.installWorker()
-    mapNispero.worker.runInstructions()
-    uploadNispero.installWorker()
-    uploadNispero.worker.runInstructions()
     singleElements.init()
     singleElements.initWrite()
-    putItemRequest.init()
-    putItemRequest.initRead()
-    putItemRequest.initWrite()
-    unitQueue.initRead()
     val parser = new PullGoParser(Source.fromFile("/home/ec2-user/go.owl"))
     for (output <- parser){
       singleElements.put("0", "", List(List(output)))
