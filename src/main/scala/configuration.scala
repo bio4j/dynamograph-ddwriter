@@ -19,20 +19,24 @@ import com.bio4j.dynamograph.parser.SingleElement
 import scala.Some
 import ohnosequences.nisperon.SingleGroup
 
+case class PutItemR(val name: String, attributes : Map[String,String], val returnedValues : String, val returnedConsumedCapacity :String, val conditionalOperator : String)
+
 object PutItemRequestSerializer extends Serializer[List[PutItemRequest]] {
 
-  case class PutItemR(val name: String, attributes : Map[String,AttributeValue], val returnedValues : String, val returnedConsumedCapacity :String, val conditionalOperator : String)
+  def toStringMap(map : Map[String,AttributeValue]) = map.mapValues[String](_.getS)
+
+  def fromStringMap(map : Map[String,String]) = map.mapValues(new AttributeValue().withS(_))
 
   def fromString(s: String): List[PutItemRequest] = {
     val putItems = JSON.extract[List[PutItemR]](s)
     val result = putItems.map(x => {
-      new PutItemRequest().withTableName(x.name).withItem(x.attributes).withReturnValues(x.returnedValues).withReturnConsumedCapacity(x.returnedConsumedCapacity).withConditionalOperator(x.conditionalOperator)
+      new PutItemRequest().withTableName(x.name).withItem(fromStringMap(x.attributes)).withReturnValues(x.returnedValues).withReturnConsumedCapacity(x.returnedConsumedCapacity).withConditionalOperator(x.conditionalOperator)
     })
     result
   }
 
   def toString(request: List[PutItemRequest]): String = {
-    val  converted = request.map(x => PutItemR(x.getTableName,x.getItem.toMap,x.getReturnValues, x.getReturnConsumedCapacity, x.getConditionalOperator))
+    val  converted = request.map(x => PutItemR(x.getTableName,toStringMap(x.getItem.toMap),x.getReturnValues, x.getReturnConsumedCapacity, x.getConditionalOperator))
     JSON.toJSON(converted)
   }
 }

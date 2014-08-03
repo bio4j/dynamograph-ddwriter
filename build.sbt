@@ -1,4 +1,5 @@
 import AssemblyKeys._
+import sbt.Keys._
 import sbtrelease._
 import ReleaseStateTransformations._
 import ReleasePlugin._
@@ -19,18 +20,8 @@ conflictManager := ConflictManager.latestRevision
 
 libraryDependencies ++= Seq(
   "ohnosequences" % "compota_2.10" % "0.9.1-SNAPSHOT" exclude("ohnosequences", "type-sets_2.10"),
-  "commons-io"     % "commons-io" % "2.1",
-  "com.novocode"   % "junit-interface" % "0.10" % "test",
-  "org.clapper"   % "avsl_2.10" % "1.0.1",
-  "org.json4s"    % "json4s-native_2.10" % "3.2.5",
-  "ohnosequences" % "aws-scala-tools_2.10" % "0.7.1-SNAPSHOT"  exclude("ohnosequences", "type-sets_2.10"),
   "ohnosequences" % "statika_2.10" % "1.0.0"  exclude("ohnosequences", "type-sets_2.10"),
-  "ohnosequences" % "aws-statika_2.10" % "1.0.0" exclude("ohnosequences", "type-sets_2.10"),
-  "ohnosequences" % "amazon-linux-ami_2.10" % "0.14.1"  exclude("ohnosequences", "type-sets_2.10"),
-  "net.databinder" %% "unfiltered-filter" % "0.7.1",
-  "net.databinder" %% "unfiltered-netty" % "0.7.1",
-  "net.databinder" %% "unfiltered-netty-server" % "0.7.1",
-  "bio4j" % "dynamograph_2.10" % "0.1.2-SNAPSHOT" exclude("com.chuusai", "shapeless_2.11")  exclude("ohnosequences", "aws-statika_2.11") exclude("ohnosequences", "statika_2.11")
+  "bio4j" % "dynamograph_2.10" % "0.1.2-SNAPSHOT" exclude("com.chuusai", "shapeless_2.11")  exclude("ohnosequences", "aws-statika_2.11") exclude("ohnosequences", "statika_2.11") exclude("com.thinkaurelius.titan", "titan-berkeleyje") exclude("org.mockito", "mockito-all") exclude("com.thinkaurelius.titan", "titan-all")
 )
 
 resolvers +=  Resolver.url("era7" + " public ivy releases",  url("http://releases.era7.com.s3.amazonaws.com"))(Resolver.ivyStylePatterns)
@@ -75,8 +66,6 @@ dependencyOverrides += "org.apache.httpcomponents" % "httpclient" % "4.2"
 
 dependencyOverrides += "joda-time" % "joda-time" % "2.3"
 
-dependencyOverrides += "com.thinkaurelius.titan" % "titan-berkeleyje" % "0.4.4"
-
 dependencyOverrides +=  "org.apache.commons" % "commons-math" % "2.2"
 
 dependencyOverrides += "org.apache.lucene" % "lucene-core" % "4.4.0"
@@ -89,7 +78,6 @@ dependencyOverrides += "com.amazonaws" % "aws-java-sdk" % "1.8.0"
 
 dependencyOverrides += "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.2"
 
-dependencyOverrides += "org.mockito" % "mockito-all" % "1.9.5"
 
 mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {
   case "log4j.properties" => MergeStrategy.first
