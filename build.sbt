@@ -14,14 +14,14 @@ description := "compota dynamograph distributed writing"
 
 organization := "bio4j"
 
-scalaVersion:= "2.10.4"
+scalaVersion:= "2.11.1"
 
 conflictManager := ConflictManager.latestRevision
 
 libraryDependencies ++= Seq(
-  "ohnosequences" % "compota_2.10" % "0.9.4-SNAPSHOT" exclude("ohnosequences", "type-sets_2.10"),
-  "ohnosequences" % "statika_2.10" % "1.0.0"  exclude("ohnosequences", "type-sets_2.10"),
-  "bio4j" % "dynamograph_2.11" % "0.1.4-SNAPSHOT" exclude("com.chuusai", "shapeless_2.11")  exclude("ohnosequences", "aws-statika_2.11") exclude("ohnosequences", "statika_2.11") exclude("com.thinkaurelius.titan", "titan-berkeleyje") exclude("org.mockito", "mockito-all") exclude("com.thinkaurelius.titan", "titan-all")
+  "ohnosequences" %% "compota" % "0.9.4-SNAPSHOT",
+  "ohnosequences" %% "statika" % "1.1.0-SNAPSHOT",
+  "bio4j" %% "dynamograph" % "0.1.4-SNAPSHOT" exclude("com.chuusai", "shapeless_2.11") exclude("com.thinkaurelius.titan", "titan-berkeleyje") exclude("org.mockito", "mockito-all") exclude("com.thinkaurelius.titan", "titan-all")
 )
 
 resolvers +=  Resolver.url("era7" + " public ivy releases",  url("http://releases.era7.com.s3.amazonaws.com"))(Resolver.ivyStylePatterns)
@@ -32,19 +32,19 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 
 metadataObject := name.value
 
-dependencyOverrides += "ohnosequences" % "aws-scala-tools_2.10" % "0.7.1-SNAPSHOT"
+dependencyOverrides += "ohnosequences" %% "aws-scala-tools" % "0.7.1-SNAPSHOT"
 
-dependencyOverrides += "org.scalatest" % "scalatest_2.10" % "2.0"
+dependencyOverrides += "org.scalatest" %% "scalatest" % "2.2.1"
 
-dependencyOverrides += "ohnosequences" % "aws-statika_2.10" % "1.0.0"
+dependencyOverrides += "ohnosequences" %% "aws-statika" % "1.1.0-SNAPSHOT"
 
-dependencyOverrides += "ohnosequences" % "statika_2.10" % "1.0.0"
+dependencyOverrides += "ohnosequences" %% "statika" % "1.1.0-SNAPSHOT"
 
-dependencyOverrides += "ohnosequences" % "amazon-linux-ami_2.10" % "0.14.1"
+dependencyOverrides += "ohnosequences" %% "amazon-linux-ami" % "0.14.1-SNAPSHOT"
 
 dependencyOverrides += "commons-codec" % "commons-codec" % "1.6"
 
-dependencyOverrides += "com.chuusai" % "shapeless_2.10.2" % "2.0.0-M1"
+dependencyOverrides += "com.chuusai" %% "shapeless" % "2.0.0"
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-core" % "2.1.2"
 
@@ -53,8 +53,6 @@ dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % "2.1.
 dependencyOverrides += "jline" % "jline" % "2.6"
 
 dependencyOverrides += "org.slf4j" % "slf4j-api" % "1.7.5"
-
-dependencyOverrides += "com.thinkaurelius.titan" % "titan-core" % "0.4.1"
 
 dependencyOverrides += "com.codahale.metrics" % "metrics-core" % "3.0.1"
 
