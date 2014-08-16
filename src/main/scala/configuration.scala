@@ -6,7 +6,7 @@ import ohnosequences.nisperon._
 import ohnosequences.nisperon.JSON
 import ohnosequences.nisperon.queues.{unitQueue, ProductQueue}
 import com.bio4j.dynamograph.parser.SingleElement
-import com.bio4j.dynamograph.parser.go.PullGoParser
+import com.bio4j.dynamograph.parser.go._
 import com.bio4j.dynamograph.ServiceProvider
 import com.amazonaws.services.dynamodbv2.model.{AttributeValue, PutItemRequest}
 import ohnosequences.nisperon.logging.S3Logger
@@ -116,7 +116,7 @@ object DynamograpDistributedWriting extends Nisperon{
     singleElements.init()
     singleElements.initWrite()
     var t = 0
-    val namespaceParser = new PullGoParser(Source.fromFile("/home/ec2-user/go_namespace.txt"))
+    val namespaceParser = new PullGoNamespaceParser(Source.fromFile("/home/ec2-user/go_namespace.txt"))
     for (output <- namespaceParser){
       singleElements.put(s"n_$t", "", List(List(output)))
       t = t+1

@@ -42,6 +42,8 @@ dependencyOverrides += "ohnosequences" %% "statika" % "1.1.0-SNAPSHOT"
 
 dependencyOverrides += "ohnosequences" %% "amazon-linux-ami" % "0.14.1-SNAPSHOT"
 
+dependencyOverrides += "ohnosequences" %% "typesets" % "0.4.9-SNAPSHOT"
+
 dependencyOverrides += "commons-codec" % "commons-codec" % "1.6"
 
 dependencyOverrides += "com.chuusai" %% "shapeless" % "2.0.0"
