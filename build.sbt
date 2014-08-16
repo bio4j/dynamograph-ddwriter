@@ -19,9 +19,9 @@ scalaVersion:= "2.10.4"
 conflictManager := ConflictManager.latestRevision
 
 libraryDependencies ++= Seq(
-  "ohnosequences" % "compota_2.10" % "0.9.1-SNAPSHOT" exclude("ohnosequences", "type-sets_2.10"),
+  "ohnosequences" % "compota_2.10" % "0.9.4-SNAPSHOT" exclude("ohnosequences", "type-sets_2.10"),
   "ohnosequences" % "statika_2.10" % "1.0.0"  exclude("ohnosequences", "type-sets_2.10"),
-  "bio4j" % "dynamograph_2.10" % "0.1.2-SNAPSHOT" exclude("com.chuusai", "shapeless_2.11")  exclude("ohnosequences", "aws-statika_2.11") exclude("ohnosequences", "statika_2.11") exclude("com.thinkaurelius.titan", "titan-berkeleyje") exclude("org.mockito", "mockito-all") exclude("com.thinkaurelius.titan", "titan-all")
+  "bio4j" % "dynamograph_2.11" % "0.1.4-SNAPSHOT" exclude("com.chuusai", "shapeless_2.11")  exclude("ohnosequences", "aws-statika_2.11") exclude("ohnosequences", "statika_2.11") exclude("com.thinkaurelius.titan", "titan-berkeleyje") exclude("org.mockito", "mockito-all") exclude("com.thinkaurelius.titan", "titan-all")
 )
 
 resolvers +=  Resolver.url("era7" + " public ivy releases",  url("http://releases.era7.com.s3.amazonaws.com"))(Resolver.ivyStylePatterns)

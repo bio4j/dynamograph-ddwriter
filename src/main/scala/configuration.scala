@@ -5,7 +5,8 @@ import ohnosequences.nisperon.console.Server
 import ohnosequences.nisperon._
 import ohnosequences.nisperon.JSON
 import ohnosequences.nisperon.queues.{unitQueue, ProductQueue}
-import com.bio4j.dynamograph.parser.{PullGoParser, SingleElement}
+import com.bio4j.dynamograph.parser.SingleElement
+import com.bio4j.dynamograph.parser.go.PullGoParser
 import com.bio4j.dynamograph.ServiceProvider
 import com.amazonaws.services.dynamodbv2.model.{AttributeValue, PutItemRequest}
 import ohnosequences.nisperon.logging.S3Logger
@@ -63,7 +64,6 @@ object uploadInstructions extends Instructions[List[PutItemRequest], Unit] {
 
   override def solve(input: List[PutItemRequest], logger: S3Logger, context: Context): List[Unit] = {
     logger.info("input: " + input)
-    logger.info("parent: " + Tasks.parent("parent.test2"))
     ServiceProvider.dynamoDbExecutor.execute(input) :: Nil
   }
 }
@@ -115,11 +115,17 @@ object DynamograpDistributedWriting extends Nisperon{
   override def addTasks(): Unit = {
     singleElements.init()
     singleElements.initWrite()
+    var t = 0
+    val namespaceParser = new PullGoParser(Source.fromFile("/home/ec2-user/go_namespace.txt"))
+    for (output <- namespaceParser){
+      singleElements.put(s"n_$t", "", List(List(output)))
+      t = t+1
+    }
+    t = 0
     val parser = new PullGoParser(Source.fromFile("/home/ec2-user/go.owl"))
     for (output <- parser){
-      singleElements.put("0", "", List(List(output)))
-      singleElements.s3Writer.flush()
-      singleElements.sqsWriter.get.flush()
+      singleElements.put(s"g_$t", "", List(List(output)))
+      t = t+1
     }
   }
 
